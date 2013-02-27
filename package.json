@@ -1,8 +1,9 @@
 {
-  "name": "picl-experiments",
-  "fullName": "picl-experiments",
-  "description": "a basic add-on",
-  "author": "",
-  "license": "MPL 2.0",
-  "version": "0.1"
+    "name": "picl-experiments", 
+    "license": "MPL 2.0", 
+    "author": "", 
+    "version": "0.1", 
+    "fullName": "picl-experiments", 
+    "id": "jid1-veabVAsJL398Cg", 
+    "description": "a basic add-on"
 }
