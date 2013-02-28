@@ -2,22 +2,41 @@ var cq = require("./cqueue");
 
 exports["test cqueue"] = function(assert) {
   assert.ok(cq.queue, "there is no cqueue");
-  assert.ok(new cq.queue("outgoing"), "one cannot create a cqueue");
+  assert.ok(new cq.queue(), "one cannot create a cqueue");
 };
 
-exports["test cqueue bad creation"] = function(assert) {
+exports["test cqueue bad setup"] = function(assert) {
+  var q = new cq.queue();
   assert.throws(function() {
-    new cq.queue();
+    q.setup();
   });
+  assert.throws(function() {
+    q.setup("outgoing");
+  });
+  assert.throws(function() {
+    q.setup("outgoing", "moz_bookmarks", {"foo": "integer"});
+  });
+
 };
 
 exports["test cqueue creation of on-db stuff"] = function(assert) {
-  var q = new cq.queue("outgoing");
-  q.watchTable("moz_bookmarks", {
-    "insert": "values ('fill-in UIUD here', 'bookmark', 'create', NEW.title)",
-    "update": "values ('fill-in UIUD here', 'bookmark', 'update', NEW.title)",
-    "delete": "values ('fill-in UIUD here', 'bookmark', 'delete', null)"
-  });
+  var q = new cq.queue();
+  q.setup(
+    "outgoing",
+    "moz_bookmarks",
+    {
+      type: "integer",
+      parent: "integer",
+      position: "integer",
+      title: "longvarchar",
+      dateAdded: "integer",
+      lastModified: "integer"
+    },
+    {
+      "insert": "values (NEW.guid, 'bookmark', 'create', NEW.type, NEW.parent, NEW.position, NEW.title, NEW.dateAdded, NEW.lastModified)",
+      "update": "values (NEW.guid, 'bookmark', 'update', NEW.type, NEW.parent, NEW.position, NEW.title, NEW.dateAdded, NEW.lastModified)",
+      "delete": "values (NEW.guid, 'bookmark', 'delete', null, null, null, null, null, null)"
+    });
   assert.pass("created the queue");
 };
 
