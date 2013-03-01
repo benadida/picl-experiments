@@ -24,19 +24,28 @@ exports["test cqueue creation of on-db stuff"] = function(assert) {
   q.setup(
     "moz_bookmarks",
     {
-      type: "integer",
-      parent: "integer",
-      position: "integer",
       title: "longvarchar",
-      dateAdded: "integer",
-      lastModified: "integer"
+      lastModified: "integer",
     },
     {
-      "insert": "values (NEW.guid, 'bookmark', 'create', NEW.type, NEW.parent, NEW.position, NEW.title, NEW.dateAdded, NEW.lastModified)",
-      "update": "values (NEW.guid, 'bookmark', 'update', NEW.type, NEW.parent, NEW.position, NEW.title, NEW.dateAdded, NEW.lastModified)",
-      "delete": "values (NEW.guid, 'bookmark', 'delete', null, null, null, null, null, null)"
+      "insert": "values (NEW.guid, 'bookmark', 'create', NEW.title, NEW.lastModified)",
+      "update": "values (NEW.guid, 'bookmark', 'update', NEW.title, NEW.lastModified)",
+      "delete": "values (NEW.guid, 'bookmark', 'delete', null, null)"
     });
   assert.pass("created the queue");
+};
+
+exports["test cqueue readAll"] = function(assert) {
+  var q = new cq.queue("outgoing");
+  q.readAll()
+    .then(
+      function(results) {
+        console.log(JSON.stringify(results));
+      },
+      function(error) {
+        console.log(error);
+      });
+  assert.pass("read");
 };
 
 require("test").run(exports);
