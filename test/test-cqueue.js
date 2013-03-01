@@ -2,27 +2,26 @@ var cq = require("./cqueue");
 
 exports["test cqueue"] = function(assert) {
   assert.ok(cq.queue, "there is no cqueue");
-  assert.ok(new cq.queue(), "one cannot create a cqueue");
+  assert.ok(new cq.queue("outgoing"), "one cannot create a cqueue");
 };
 
 exports["test cqueue bad setup"] = function(assert) {
-  var q = new cq.queue();
+  var q = new cq.queue("outgoing");
   assert.throws(function() {
     q.setup();
   });
   assert.throws(function() {
-    q.setup("outgoing");
+    q.setup("moz_bookmarks");
   });
   assert.throws(function() {
-    q.setup("outgoing", "moz_bookmarks", {"foo": "integer"});
+    q.setup("moz_bookmarks", {"foo": "integer"});
   });
 
 };
 
 exports["test cqueue creation of on-db stuff"] = function(assert) {
-  var q = new cq.queue();
+  var q = new cq.queue("outgoing");
   q.setup(
-    "outgoing",
     "moz_bookmarks",
     {
       type: "integer",
